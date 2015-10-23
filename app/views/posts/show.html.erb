@@ -3,3 +3,9 @@
 <% unless @post.content.nil? %>
 <p><%= @post.content %></p>
 <% end %>
+<%= render "newcomment", post: @post %>
+<% unless @post.comments.empty? %>
+  <% @post.comments.each do |comment| %>
+    <%= render "comment", comment: comment %>
+  <% end %>
+<% end %>

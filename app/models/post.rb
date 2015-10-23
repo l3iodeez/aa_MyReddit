@@ -1,5 +1,5 @@
 class Post < ActiveRecord::Base
-  validates :title, :sub_id, :author_id, presence: true
+  validates :title, :author_id, presence: true
   validate :has_content_or_url
 
   belongs_to(
@@ -8,7 +8,21 @@ class Post < ActiveRecord::Base
     foreign_key: :author_id
   )
 
-  belongs_to :sub
+  has_many(
+    :postings,
+    class_name: "PostSub",
+    foreign_key: :post_id
+    )
+
+  has_many(
+    :subs,
+    through: :postings,
+    source: :sub
+  )
+
+  has_many :comments
+
+
 
   def has_content_or_url
     errors.add(:base, "You must provide some content or a URL") unless url || content

@@ -1,0 +1,13 @@
+
+
+
+
+<form action="<%= post_comments_url(post) %>" method="post">
+  <%= auth_token %>
+
+  <label>Comment:
+    <textarea name="comment[content]"></textarea>
+  </label>
+
+  <input type="submit" value="Add Comment">
+</form>

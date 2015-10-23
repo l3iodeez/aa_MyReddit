@@ -1,13 +1,14 @@
 Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-
+  root 'sessions#new'
   resources :users, except: [:index, :edit, :update]
   resource :session, only: [:new, :create, :destroy]
-  resources :subs, except: [:destroy] do
-    resources :posts, only: [:new]
+  resources :subs, except: [:destroy]
+  resources :posts do
+    resources :comments, only: [:create]
   end
-  resources :posts, except: [:new]
+  resources :comments, only: [:show]
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'

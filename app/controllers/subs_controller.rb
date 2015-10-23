@@ -1,5 +1,5 @@
 class SubsController < ApplicationController
-
+  before_action :verify_logged_in
   before_action :set_sub, only: [:show, :edit, :update]
   before_action :verify_moderator, only: [:edit, :update]
 

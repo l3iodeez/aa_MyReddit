@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  before_action :verify_logged_in
   before_action :set_post, except: [:new, :create]
 
   def show
@@ -13,9 +14,9 @@ class PostsController < ApplicationController
   end
 
   def create
-    @sub = Sub.find(post_params[:sub_id])
-    @post = @sub.posts.new(post_params)
+    @post = Post.new(post_params)
     @post.author_id = current_user.id
+    
     if @post.save
       redirect_to post_url(@post)
     else
@@ -33,7 +34,7 @@ class PostsController < ApplicationController
       redirect_to post_url(@post)
     else
       errors_to_flash(@post, true)
-      fail
+
       render :edit
     end
   end
@@ -51,7 +52,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :content, :url, :sub_id)
+    params.require(:post).permit(:title, :content, :url, sub_ids: [])
   end
 
 end

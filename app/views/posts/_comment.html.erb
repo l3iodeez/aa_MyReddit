@@ -1,0 +1,7 @@
+<%= comment.content %>
+<br>
+<% unless comment.children.empty? %>
+  <% comment.children.each do |child| %>
+    <%= render 'comment', comment: child %>
+  <% end %>
+<% end %>
