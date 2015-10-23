@@ -1,5 +1,8 @@
 class SessionsController < ApplicationController
 
+  before_action :verify_logged_in, only: [:destroy]
+  before_action :verify_logged_out, only: [:new, :create]
+  
   def new
     @user = User.new
     render :new
@@ -12,24 +15,20 @@ class SessionsController < ApplicationController
     )
 
     if user
-      user.reset_session_token!
-      session[:session_token] = user.session_token
+      login!(user)
       redirect_to user_url(user)
     else
       @user = User.new(username: params[:user][:username])
-      flash.now[:errors] = "Invalid username or password."
+      add_to_flash("Invalid username or password", :errors, true)
       render :new
     end
   end
 
 
   def destroy
-    if session[:session_token]
-      user = User.find_by_session_token(session[:session_token])
-      user.reset_session_token!
-    else
-      render :new
-    end
+      logout!
+      add_to_flash("You have been logged out.", :errors)
+      redirect_to new_session_url
   end
 
 end

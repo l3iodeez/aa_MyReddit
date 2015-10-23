@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :verify_logged_in, except: [:new, :create]
+  before_action :verify_logged_out, only: [:new, :create]
+
   def new
     @user = User.new
     render :new
@@ -8,6 +11,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      login!(@user)
       redirect_to user_url(@user)
     else
       render :new, status: :unprocessable_entity
@@ -15,6 +19,7 @@ class UsersController < ApplicationController
   end
 
   def show
+
     render :show
   end
 
@@ -42,6 +47,7 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+
   end
 
 end
