@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def errors_to_flash(object, now = false)
-    object.errors.each do |error|
+    object.errors.full_messages.each do |error|
       add_to_flash(error, :errors, now)
     end
   end

@@ -1,16 +1,20 @@
 class PostsController < ApplicationController
+  before_action :set_post, except: [:new, :create]
 
   def show
     render :show
   end
 
   def new
+
     @post = Post.new
+
     render :new
   end
 
   def create
-    @post = Post.new(post_params)
+    @sub = Sub.find(post_params[:sub_id])
+    @post = @sub.posts.new(post_params)
     @post.author_id = current_user.id
     if @post.save
       redirect_to post_url(@post)
@@ -29,6 +33,7 @@ class PostsController < ApplicationController
       redirect_to post_url(@post)
     else
       errors_to_flash(@post, true)
+      fail
       render :edit
     end
   end
@@ -46,7 +51,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :description, :url, :sub_id)
+    params.require(:post).permit(:title, :content, :url, :sub_id)
   end
 
 end
